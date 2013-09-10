@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import org.bouncycastle.util.Arrays;
-
 import net.minecraft.block.material.Material;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandHandler;
@@ -21,6 +19,8 @@ import net.minecraft.util.ChatMessageComponent;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.DimensionManager;
 
+import org.bouncycastle.util.Arrays;
+
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
@@ -33,7 +33,6 @@ import cpw.mods.fml.common.network.*;
 import cpw.mods.fml.common.network.NetworkMod.SidedPacketHandler;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.server.FMLServerHandler;
 import ds.mods.worldscript.events.EntityJoinWorldEC;
 import ds.mods.worldscript.events.PlayerInteractEventEC;
 import ds.mods.worldscript.events.TickEC;
@@ -68,6 +67,8 @@ public class WorldScript {
 	{
 		return MinecraftServer.getServer().getFile((FMLCommonHandler.instance().getSide() == Side.CLIENT ? "saves/" : "")+DimensionManager.getWorld(0).getSaveHandler().getWorldDirectoryName()+"/"+child);
 	}
+
+	public static EventThread evtthread;
 	
 	@EventHandler
 	public void preinit(FMLPreInitializationEvent event)
@@ -95,6 +96,8 @@ public class WorldScript {
 		ch.registerCommand(new CommandLuaUnload());
 		ch.registerCommand(new CommandLuaLoad());
 		ch.registerCommand(new CommandLuaReload());
+		evtthread = new EventThread();
+		evtthread.start();
 	}
 	
 	public static void unload()
@@ -162,7 +165,7 @@ public class WorldScript {
 
 		@Override
 		public String getCommandUsage(ICommandSender icommandsender) {
-			return "Something something blah";
+			return "Allows dynamic execution of lua.";
 		}
 		
 		@Override
@@ -209,7 +212,7 @@ public class WorldScript {
 
 		@Override
 		public String getCommandUsage(ICommandSender icommandsender) {
-			return "Something something blah";
+			return "Unloads all luascripts";
 		}
 		
 		@Override
@@ -236,7 +239,7 @@ public class WorldScript {
 
 		@Override
 		public String getCommandUsage(ICommandSender icommandsender) {
-			return "Something something blah";
+			return "Loads all luascipts";
 		}
 		
 		@Override
@@ -265,7 +268,7 @@ public class WorldScript {
 
 		@Override
 		public String getCommandUsage(ICommandSender icommandsender) {
-			return "Something something blah";
+			return "Reloads all luascipts";
 		}
 		
 		@Override

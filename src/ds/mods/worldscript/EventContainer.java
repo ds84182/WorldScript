@@ -26,6 +26,18 @@ public class EventContainer {
 	
 	public void invoke(Varargs args)
 	{
+		synchronized (EventThread.eventStack)
+		{
+			synchronized (EventThread.varargStack)
+			{
+				EventThread.eventStack.add(this);
+				EventThread.varargStack.add(args);
+			}
+		}
+	}
+	
+	public void runFunctions(Varargs args)
+	{
 		for (LuaFunction f : handlers)
 		{
 			synchronized(f)
