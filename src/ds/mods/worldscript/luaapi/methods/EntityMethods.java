@@ -8,6 +8,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.DamageSource;
 import ds.mods.worldscript.luaapi.objects.EntityObject;
 import ds.mods.worldscript.luaapi.tools.LuaMethod;
+import ds.mods.worldscript.org.luaj.vm2.LuaError;
 import ds.mods.worldscript.org.luaj.vm2.LuaValue;
 import ds.mods.worldscript.org.luaj.vm2.Varargs;
 
@@ -84,5 +85,44 @@ public class EntityMethods {
 		}
 		else if (obj.entity instanceof Entity)
 			obj.entity.setDead();
+	}
+	
+	@LuaMethod
+	public void cleanKill(EntityObject obj)
+	{
+		obj.entity.setDead();
+	}
+	
+	@LuaMethod
+	public LuaValue isWet(EntityObject obj)
+	{
+		return valueOf(obj.entity.isWet());
+	}
+	
+	@LuaMethod
+	public LuaValue isInWater(EntityObject obj)
+	{
+		return valueOf(obj.entity.isInWater());
+	}
+	
+	@LuaMethod
+	public LuaValue getDistance(EntityObject obj, Varargs var)
+	{
+		LuaValue v = var.checknotnil(1);
+		if (v instanceof EntityObject)
+		{
+			return valueOf(obj.entity.getDistanceToEntity(((EntityObject) v).entity));
+		}
+		else if (v.isnumber())
+		{
+			double x = v.checkdouble();
+			double y = var.checkdouble(2);
+			double z = var.checkdouble(3);
+			return valueOf(obj.entity.getDistance(x, y, z));
+		}
+		else
+		{
+			throw new LuaError("expected entity or number, got "+v.typename());
+		}
 	}
 }

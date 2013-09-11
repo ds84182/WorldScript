@@ -96,6 +96,7 @@ public class JsePlatform {
 		_G.load(new ResLib());
 		_G.load(new NBTLib());
 		_G.load(new ItemStackLib());
+		_G.load(new ServerLib());
 		
 		_G.load(new DebugLib());
 		_G.set("require", LuaValue.NIL);
