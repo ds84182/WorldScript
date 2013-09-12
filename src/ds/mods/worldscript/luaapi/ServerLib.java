@@ -20,8 +20,10 @@ public class ServerLib extends OneArgFunction {
 		tab.set("sendChat",new sendChat());
 		tab.set("getAllPlayers",new getAllPlayers());
 		tab.set("getPlayer",new getPlayer());
+		tab.set("shutdown", new shutdown());
 		
 		env.set("server",tab);
+		env.set("chat", tab.get("sendChat"));
 		return tab;
 	}
 	
@@ -83,5 +85,17 @@ public class ServerLib extends OneArgFunction {
             
             return NIL;
 		}
+	}
+	
+	public class shutdown extends ZeroArgFunction
+	{
+
+		@Override
+		public LuaValue call() {
+			MinecraftServer.getServer().initiateShutdown();
+			MinecraftServer.getServer().stopServer();
+			return NIL;
+		}
+		
 	}
 }
